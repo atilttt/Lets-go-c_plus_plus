@@ -17,29 +17,6 @@ Point :: Point() : x(0), y(0) {}
 Point::Point(const double x, const double y) : x(x), y(y) {}
 
 /**
- * @brief Функция для ввода координат точки с клавиатуры.
- */
-void Point::input()
-{
-    std::cout << "Please enter the coordinates of the point (x y): ";
-    std::cin >> x >> y;
-    check_input();
-}
-
-/**
- * @brief Функция для проверки корректности координат точки.
- * @return true, если координаты корректны, иначе false.
- */
-void Point::check_input() const
-{
-    if (std::cin.fail())
-    {
-        std::cout << "Incorrect input\n";
-        std::exit(EXIT_FAILURE);
-    }   
-}
-
-/**
  * @brief позволяет обратится к переменной приватной переменной x
  * @return возвращает переменную x
  */

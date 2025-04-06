@@ -5,18 +5,16 @@
 #include <cmath>
 
 class Hexagon {
-    private:
-        Point centere;
-        double radius = 0;
-        Point random_point_on_circle;
-        bool check() const;
-    public:
-        Hexagon();
-        
-        void input();
-        void print_info() const;
-        double lenght_side() const;
-        double get_area() const;
+    Point center;
+    double radius;
+    Point point_on_circle;
+    
+public:
+    Hexagon(const Point& center, double radius, const Point& point_on_circle);
+    
+    double side_length() const;
+    double area() const;
+    void print_basic_info() const;
 };
 
-#endif //CLASS_HEXAGON_H
+#endif
