@@ -11,9 +11,6 @@ class Point
         Point(); 
         Point(const double x, const double y);
 
-        void input();
-        void check_input() const;
-
         double getX() const;
         double getY() const;
 };
