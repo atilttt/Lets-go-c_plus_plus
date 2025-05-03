@@ -3,18 +3,18 @@
 
 namespace CUSTOM
 {
-    Circle::Circle(const Point& center, unsigned int radius) : center(center), radius(radius)
+    Circle::Circle(const Point& center, int radius) : center(center), radius(radius)
     {
-        if (radius == 0)
+        if (radius <= 0)
         {
             throw invalid_argument("Ошибка создания круга: радиус должен быть положительным.");
         }
     }
 
-    Circle::Circle(unsigned int x, unsigned int y, unsigned int radius)
+    Circle::Circle(unsigned int x, unsigned int y, int radius)
         : center(Point(x, y)), radius(radius)
     {
-        if (radius == 0)
+        if (radius <= 0)
         {
             throw invalid_argument("Ошибка создания круга: радиус должен быть положительным.");
         }

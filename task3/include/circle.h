@@ -21,7 +21,7 @@ namespace CUSTOM
              * @param center - центр окружности
              * @param radius - радиус круга
              */
-            Circle(const Point& center, unsigned int radius);
+            Circle(const Point& center, int radius);
 
             /**
              * @brief конструктор через координаты 
@@ -29,17 +29,17 @@ namespace CUSTOM
              * @param y координата центра на оси ординат
              * @param radius радиус окружности
              */
-            Circle(unsigned int x, unsigned int y, unsigned int radius);
+            Circle(unsigned int x, unsigned int y, int radius);
 
             /**
              * @brief метод ToString для вывода информации об окружности
              */
-            string ToString() const;
+            string ToString() const; // реализация виртуального метода
 
             /**
              * @brief виртуальный метод Draw для вывода информации
              */
-            void Draw() const override;
+            void Draw() const override; //реализация чисто виртуального метода
     };
 } 
 

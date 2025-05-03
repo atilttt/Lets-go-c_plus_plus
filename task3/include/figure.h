@@ -13,6 +13,12 @@ namespace CUSTOM
             virtual void Draw() const = 0;
 
             /**
+             * @brief виртуальный метод для строкового представления фигуры
+             * @return строковое описание фигуры
+             */
+            virtual string ToString() const = 0; 
+
+            /**
              * @brief виртуальный диструктор (по умолчанию)
              */
             virtual ~Figure() = default;
