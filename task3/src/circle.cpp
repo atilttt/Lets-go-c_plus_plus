@@ -11,7 +11,7 @@ namespace CUSTOM
         }
     }
 
-    Circle::Circle(unsigned int x, unsigned int y, int radius)
+    Circle::Circle(int x, int y, int radius)
         : center(Point(x, y)), radius(radius)
     {
         if (radius <= 0)

@@ -38,11 +38,11 @@ Circle fill_circle() {
             enum Mode { SEPARATE = 1, SINGLE_LINE = 2 };
             int mode;
             cout << "\nВыберите способ ввода центра круга:\n";
-            cout << "1. Вводить X и Y отдельно\n";
-            cout << "2. Вводить X и Y вместе\n> ";
+            cout << SEPARATE << ". Вводить X и Y отдельно\n";
+            cout << SINGLE_LINE << ". Вводить X и Y вместе\n> ";
             cin >> mode;
 
-            unsigned int x, y, radius;
+            int x, y, radius;
 
             switch (mode) {
                 case SEPARATE: {

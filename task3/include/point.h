@@ -15,7 +15,7 @@ namespace CUSTOM
             * @param x Координата X (по умолчанию 0)
             * @param y Координата Y (по умолчанию 0)
             */
-        Point(unsigned int x = 0, unsigned int y = 0);
+        Point(int x = 0, int y = 0);
     
         static unsigned int max_x; ///< Максимальное значение X
         static unsigned int max_y; ///< Максимальное значение Y

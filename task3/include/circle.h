@@ -29,7 +29,7 @@ namespace CUSTOM
              * @param y координата центра на оси ординат
              * @param radius радиус окружности
              */
-            Circle(unsigned int x, unsigned int y, int radius);
+            Circle(int x, int y, int radius);
 
             /**
              * @brief метод ToString для вывода информации об окружности
