@@ -14,7 +14,7 @@ namespace CUSTOM
     {
         private: 
             Point center; // центр окружности
-            unsigned int radius; // радиус окружности
+            int radius; // радиус окружности
         public:
             /**
              * @brief конструктор через обьект класс

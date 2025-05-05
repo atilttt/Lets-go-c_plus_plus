@@ -7,8 +7,8 @@ namespace CUSTOM
     class Point // класс представляющий точку на плоскости
     {
         private:
-            unsigned int x;
-            unsigned int y;
+            int x;
+            int y;
         public:
             /**
             * @brief Конструктор точки
@@ -17,8 +17,8 @@ namespace CUSTOM
             */
         Point(int x = 0, int y = 0);
     
-        static unsigned int max_x; ///< Максимальное значение X
-        static unsigned int max_y; ///< Максимальное значение Y
+        static int max_x; ///< Максимальное значение X
+        static int max_y; ///< Максимальное значение Y
     
          /**
         * @brief Получение координаты X
