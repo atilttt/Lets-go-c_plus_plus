@@ -2,8 +2,8 @@
 
 namespace CUSTOM
 {
-    unsigned int Point :: max_x  = 0;
-    unsigned int Point :: max_y = 0;
+    int Point :: max_x  = 0;
+    int Point :: max_y = 0;
 
     Point::Point(int x, int y): x(x), y(y) {
         if (x > max_x || y > max_y) {
