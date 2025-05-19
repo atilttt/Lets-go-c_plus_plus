@@ -1,114 +1,133 @@
 #pragma once
 
-#include <deque>
-#include <iostream>
-#include <string>
 #include <utility>
-#include <cstdlib>
-#include <initializer_list>
+#include <string>
+#include <cstddef>
 
-const int MIN_PRIORITY = 0;
-const int MAX_PRIORITY = 1000;
+const size_t MIN_PRIORITY = 0;
+const size_t MAX_PRIORITY = 1000;
 
-/**
- * @class PriorityDeque - очередь с приоритетом и двусторонним доступом. Элементы представляются парой.
- * Позволяет добавлять с обеих концов.
- * Элементы можно удалять, а также находить элементы с наимешньшим и наибольшим приоритетом
- */
-class PriorityDeque
-{
+class PriorityDeque {
     private:
-        std::deque<std::pair<int, int>> data;
+        std::pair<size_t, size_t>* data; 
+        size_t capacity;                  
+        size_t count;                     
 
         /**
-         * @brief функция, завершающая программу и выводящаяя ошибку
-         */
-        void error_message(const std::string &message) const;
+        * @brief Выводит сообщение об ошибке и завершает программу.
+        * @param message Текст ошибки.
+        */
+        void error_message(const std::string& message) const;
 
         /**
-         * @brief проверка допустимость приоритета
-         */
-        bool isValidPriority(int priority) const;
+        * @brief Проверяет допустимость значения приоритета.
+        * @param priority Приоритет элемента.
+        * @return true, если приоритет допустим.
+        */
+        bool isValidPriority(size_t priority) const;
+
+        /**
+        * @brief Увеличивает вместимость массива вдвое при необходимости.
+        */
+        void ensure_capacity();
+
+        /**
+        * @brief Сдвигает все элементы массива вправо на одну позицию.
+        */
+        void shift_right();
+
+        /**
+        * @brief Сдвигает все элементы массива влево на одну позицию.
+        */
+        void shift_left();
+
     public:
         /**
-         * @brief конструктор по умолчанию
-         */
+        * @brief Конструктор по умолчанию. Выделяет память на 8 элементов.
+        */
         PriorityDeque();
 
         /**
-         * @brief конструктор копирования
-         * @param other другой объект PriorityDeque для копирования
-         */
+        * @brief Конструктор с заданным максимальным размером.
+        * @param maxSize Максимальная вместимость очереди.
+        */
+        explicit PriorityDeque(size_t maxSize);
+
+        /**
+        * @brief Конструктор со списком инициализации.
+        * @param init Список пар (значение, приоритет).
+        */
+        PriorityDeque(std::initializer_list<std::pair<size_t, size_t>> init);
+
+        /**
+        * @brief Конструктор копирования.
+        * @param other Другой объект PriorityDeque.
+        */
         PriorityDeque(const PriorityDeque& other);
 
         /**
-         * @brief конструктор со списком инициализации
-         * @param init список пар (значение, приоритет)
-         */
-        PriorityDeque(std::initializer_list<std::pair<int, int>> init);
+        * @brief Оператор присваивания.
+        * @param other Другой объект PriorityDeque.
+        * @return Ссылка на текущий объект.
+        */
+        PriorityDeque& operator=(const PriorityDeque& other);
 
         /**
-         * @brief оператор присваивания копированием
-         * @param other другой объект PriorityDeque для копирования
-         */
-        PriorityDeque& operator=(const PriorityDeque& other) noexcept;
-        
-        /**
-         * @brief диструктор по умолчанию
-         */
+        * @brief Деструктор. Освобождает динамическую память.
+        */
         ~PriorityDeque();
 
         /**
-         * @brief вставка элемента в начало
-         * @param value значение элемента
-         * @param priority приоритет элемента
-         * @return завершает программу, если приоритет недопустим
-         */
-        void push_front(int value, int priority);
-        
-        /**
-         * @brief вставка элемента в конец
-         * @param value значение элемента 
-         * @param priority приоритет элимента
-         * @return завершает программу, если приоритет недопустим
-         */
-        void push_back(int value, int priority);
+        * @brief Вставляет элемент в начало очереди.
+        * @param value Значение элемента.
+        * @param priority Приоритет элемента.
+        */
+        void push_front(size_t value, size_t priority);
 
         /**
-         * @brief удаляет элемент с начала
-         */
+        * @brief Вставляет элемент в конец очереди.
+        * @param value Значение элемента.
+        * @param priority Приоритет элемента.
+        */
+        void push_back(size_t value, size_t priority);
+
+        /**
+        * @brief Удаляет элемент из начала очереди.
+        */
         void pop_front();
 
         /**
-         * @brief удаляет элемент с конца
-         */
+        * @brief Удаляет элемент из конца очереди.
+        */
         void pop_back();
 
         /**
-         * @brief функция, проверяещую очередь на пустоту
-         * @return false - очередь не пуста, true - очередь пустая 
-         */
+        * @brief Проверяет, пуста ли очередь.
+        * @return true, если очередь пуста.
+        */
         bool isEmpty() const;
 
         /**
-         * @brief функция, возвращающая количество элементов в очереди
-         */
-        int size() const;
+        * @brief Возвращает количество элементов в очереди.
+        * @return Количество элементов.
+        */
+        size_t size() const;
 
         /**
-         * @brief функция, которая находит элемент с минимальным приоритетом
-         * @return пару (значение, приоритет)
-         */
-        std::pair<int, int> get_minimal_priority() const;
-        
-        /**
-         * @brief функция, которая находит элемент с максимальным приоритетом
-         * @return пару (значение, приоритет)
-         */
-        std::pair<int, int> get_maximum_priority() const;
+        * @brief Находит элемент с минимальным приоритетом.
+        * @return Пара (значение, приоритет) с минимальным приоритетом.
+        */
+        std::pair<size_t, size_t> get_minimal_priority() const;
 
         /**
-         * @brief строковое представление очереди
-         */
+        * @brief Находит элемент с максимальным приоритетом.
+        * @return Пара (значение, приоритет) с максимальным приоритетом.
+        */
+        std::pair<size_t, size_t> get_maximum_priority() const;
+
+        /**
+        * @brief Возвращает строковое представление очереди.
+        * @return Строка формата [(значение, pr=приоритет), ...]
+        */
         std::string toString() const;
 };

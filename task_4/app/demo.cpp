@@ -1,13 +1,9 @@
 #include <iostream>
-#include "../include/Queue.h"
-
-#define DEBUG_MODE 
-
-#ifdef DEBUG_MODE
+#include "Queue.h"
 
 int main() {
-    PriorityDeque q = {{10, 3}, {5, 1}, {20, 7}};
-    
+    PriorityDeque q = { {10, 3}, {5, 1}, {20, 7} };
+
     std::cout << "Начальная очередь: " << q.toString() << "\n";
 
     auto min = q.get_minimal_priority();
@@ -21,11 +17,8 @@ int main() {
     q.push_front(200, 900);
 
     std::cout << "После изменений: " << q.toString() << "\n";
-
-    std::cout << "Проверка isEmpty(): " << (q.isEmpty() ? "пусто" : "не пусто") << "\n";
+    std::cout << "Очередь " << (q.isEmpty() ? "пуста" : "не пуста") << "\n";
     std::cout << "Размер очереди: " << q.size() << "\n";
 
     return 0;
 }
-
-#endif //DEBUG_MOD
