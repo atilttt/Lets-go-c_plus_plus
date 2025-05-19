@@ -3,24 +3,57 @@
 #include <sstream>
 #include <cstdlib>
 
-PriorityDeque::PriorityDeque() : capacity(8), count(0) {
-    data = new std::pair<size_t, size_t>[capacity];
-}
+PriorityDeque::PriorityDeque() : data(nullptr), count(0) {}
 
-PriorityDeque::PriorityDeque(size_t maxSize) : capacity(maxSize), count(0) {
-    if (capacity == 0)
+PriorityDeque::PriorityDeque(size_t maxSize) : data(nullptr), count(0) {
+    if (maxSize == 0)
         error_message("Размер очереди должен быть положительным");
-    data = new std::pair<size_t, size_t>[capacity];
 }
 
-PriorityDeque::PriorityDeque(std::initializer_list<std::pair<size_t, size_t>> init)
-    : capacity(init.size() + 8), count(0) {
-    data = new std::pair<size_t, size_t>[capacity];
+PriorityDeque::PriorityDeque(std::initializer_list<std::pair<size_t, size_t>> init) : data(nullptr), count(0) {
     for (const auto& item : init) {
         if (!isValidPriority(item.second))
             error_message("Недопустимый приоритет при инициализации: " + std::to_string(item.second));
-        data[count++] = item;
+        insert(item.first, item.second);
     }
+}
+
+PriorityDeque::PriorityDeque(const PriorityDeque& other) : count(other.count) {
+    data = new std::pair<size_t, size_t>[count];
+    for (size_t i = 0; i < count; ++i)
+        data[i] = other.data[i];
+}
+
+PriorityDeque& PriorityDeque::operator=(const PriorityDeque& other) {
+    if (this != &other) {
+        delete[] data;
+        count = other.count;
+        data = new std::pair<size_t, size_t>[count];
+        for (size_t i = 0; i < count; ++i)
+            data[i] = other.data[i];
+    }
+    return *this;
+}
+
+PriorityDeque::PriorityDeque(PriorityDeque&& other)
+    : data(other.data), count(other.count) {
+    other.data = nullptr;
+    other.count = 0;
+}
+
+PriorityDeque& PriorityDeque::operator=(PriorityDeque&& other) {
+    if (this != &other) {
+        delete[] data;
+        data = other.data;
+        count = other.count;
+        other.data = nullptr;
+        other.count = 0;
+    }
+    return *this;
+}
+
+PriorityDeque::~PriorityDeque() {
+    delete[] data;
 }
 
 void PriorityDeque::error_message(const std::string& message) const {
@@ -32,78 +65,56 @@ bool PriorityDeque::isValidPriority(size_t priority) const {
     return priority >= MIN_PRIORITY && priority <= MAX_PRIORITY;
 }
 
-void PriorityDeque::ensure_capacity() {
-    if (count >= capacity) {
-        size_t new_capacity = capacity * 2;
-        auto* new_data = new std::pair<size_t, size_t>[new_capacity];
-        for (size_t i = 0; i < count; ++i)
-            new_data[i] = data[i];
-        delete[] data;
-        data = new_data;
-        capacity = new_capacity;
-    }
-}
+void PriorityDeque::insert(size_t value, size_t priority) {
+    auto* new_data = new std::pair<size_t, size_t>[count + 1];
 
-void PriorityDeque::shift_right() {
-    for (size_t i = count; i > 0; --i)
-        data[i] = data[i - 1];
-}
+    size_t insert_index = 0;
+    while (insert_index < count && data[insert_index].second <= priority)
+        ++insert_index;
 
-void PriorityDeque::shift_left() {
-    for (size_t i = 0; i < count - 1; ++i)
-        data[i] = data[i + 1];
-}
+    for (size_t i = 0; i < insert_index; ++i)
+        new_data[i] = data[i];
 
+    new_data[insert_index] = {value, priority};
+    for (size_t i = insert_index; i < count; ++i)
+        new_data[i + 1] = data[i];
 
-PriorityDeque::PriorityDeque(const PriorityDeque& other)
-    : capacity(other.capacity), count(other.count) {
-    data = new std::pair<size_t, size_t>[capacity];
-    for (size_t i = 0; i < count; ++i)
-        data[i] = other.data[i];
-}
-
-PriorityDeque& PriorityDeque::operator=(const PriorityDeque& other) {
-    if (this != &other) {
-        delete[] data;
-        capacity = other.capacity;
-        count = other.count;
-        data = new std::pair<size_t, size_t>[capacity];
-        for (size_t i = 0; i < count; ++i)
-            data[i] = other.data[i];
-    }
-    return *this;
-}
-
-PriorityDeque::~PriorityDeque() {
     delete[] data;
-}
-
-void PriorityDeque::push_front(size_t value, size_t priority) {
-    if (!isValidPriority(priority))
-        error_message("Недопустимый приоритет в push_front");
-    ensure_capacity();
-    shift_right();
-    data[0] = {value, priority};
+    data = new_data;
     ++count;
 }
 
+void PriorityDeque::push_front(size_t value, size_t priority) {
+    insert(value, priority);
+}
+
 void PriorityDeque::push_back(size_t value, size_t priority) {
-    if (!isValidPriority(priority))
-        error_message("Недопустимый приоритет в push_back");
-    ensure_capacity();
-    data[count++] = {value, priority};
+    insert(value, priority);
 }
 
 void PriorityDeque::pop_front() {
     if (count == 0)
         error_message("Очередь пуста (pop_front)");
-    shift_left();
+
+    auto* new_data = new std::pair<size_t, size_t>[count - 1];
+    for (size_t i = 1; i < count; ++i)
+        new_data[i - 1] = data[i];
+
+    delete[] data;
+    data = new_data;
     --count;
 }
 
 void PriorityDeque::pop_back() {
     if (count == 0)
         error_message("Очередь пуста (pop_back)");
+
+    auto* new_data = new std::pair<size_t, size_t>[count - 1];
+    for (size_t i = 0; i < count - 1; ++i)
+        new_data[i] = data[i];
+
+    delete[] data;
+    data = new_data;
     --count;
 }
 
@@ -118,21 +129,13 @@ size_t PriorityDeque::size() const {
 std::pair<size_t, size_t> PriorityDeque::get_minimal_priority() const {
     if (count == 0)
         error_message("Очередь пуста (get_minimal_priority)");
-    auto min = data[0];
-    for (size_t i = 1; i < count; ++i)
-        if (data[i].second < min.second)
-            min = data[i];
-    return min;
+    return data[0];
 }
 
 std::pair<size_t, size_t> PriorityDeque::get_maximum_priority() const {
     if (count == 0)
         error_message("Очередь пуста (get_maximum_priority)");
-    auto max = data[0];
-    for (size_t i = 1; i < count; ++i)
-        if (data[i].second > max.second)
-            max = data[i];
-    return max;
+    return data[count - 1];
 }
 
 std::string PriorityDeque::toString() const {

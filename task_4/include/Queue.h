@@ -9,8 +9,7 @@ const size_t MAX_PRIORITY = 1000;
 
 class PriorityDeque {
     private:
-        std::pair<size_t, size_t>* data; 
-        size_t capacity;                  
+        std::pair<size_t, size_t>* data;                   
         size_t count;                     
 
         /**
@@ -27,20 +26,9 @@ class PriorityDeque {
         bool isValidPriority(size_t priority) const;
 
         /**
-        * @brief Увеличивает вместимость массива вдвое при необходимости.
-        */
-        void ensure_capacity();
-
-        /**
-        * @brief Сдвигает все элементы массива вправо на одну позицию.
-        */
-        void shift_right();
-
-        /**
-        * @brief Сдвигает все элементы массива влево на одну позицию.
-        */
-        void shift_left();
-
+         * @brief функция вставляющяя элементы по приоритету
+         */
+        void insert(const size_t value, const size_t count);
     public:
         /**
         * @brief Конструктор по умолчанию. Выделяет память на 8 элементов.
@@ -71,6 +59,16 @@ class PriorityDeque {
         * @return Ссылка на текущий объект.
         */
         PriorityDeque& operator=(const PriorityDeque& other);
+
+        /**
+         * @brief конструктор перемещения
+         */
+        PriorityDeque(PriorityDeque&& other);
+
+        /**
+         * @brief оператор перемещения
+         */
+        PriorityDeque& operator=(PriorityDeque&& other);
 
         /**
         * @brief Деструктор. Освобождает динамическую память.
